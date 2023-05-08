@@ -1,5 +1,5 @@
 import { App, Editor, MarkdownView,Menu, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-
+import { InsertLinkModal } from 'modal';
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
