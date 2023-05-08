@@ -29,54 +29,9 @@ export default class MyPlugin extends Plugin {
 		const statusBarItemEl = this.addStatusBarItem();
 		statusBarItemEl.setText('Techfalls Status');
 
-		// Techfall's first event subscription
-		this.registerEvent(
-			this.app.workspace.on("file-menu", (menu, file) => {
-				menu.addItem((item) => {
-					item
-						.setTitle("Tech Print File Path 👈")
-						.setIcon("document")
-						.onClick(async () => {
-							new Notice(file.path);
-						});
-				});
-			})
-		);
-		// Techfall's second event subscription
-		this.registerEvent(this.app.workspace.on("editor-menu", (menu, editor, view) => {
-			menu.addItem((item) => {
-				item
-					.setTitle("Tech Print File Path 👈")
-					.setIcon("document")
-					.onClick(async () => {
-						new Notice(file.path);
-					});
-			})
-		}));
+		
 
-		const ribbonIconE2 = this.addRibbonIcon("dice", "Open menu", (event) => {
-			const menu = new Menu(this.app);
-	  
-			menu.addItem((item) =>
-			  item
-				.setTitle("Copy")
-				.setIcon("documents")
-				.onClick(() => {
-				  new Notice("Copied");
-				})
-			);
-	  
-			menu.addItem((item) =>
-			  item
-				.setTitle("Paste")
-				.setIcon("paste")
-				.onClick(() => {
-				  new Notice("Pasted");
-				})
-			);
-	  
-			menu.showAtMouseEvent(event);
-		});
+		
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
