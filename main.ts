@@ -1,5 +1,6 @@
 import { App, Editor, MarkdownView,Menu, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { InsertLinkModal } from './modal';
+import { ExampleModal } from 'myfirstmodal';
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -63,6 +64,16 @@ export default class MyPlugin extends Plugin {
 
 				new InsertLinkModal(this.app, selectedText, onSubmit).open();
 			}
+		});
+		// This is Techfall's third command to open a modal
+		this.addCommand({
+			id: "display-modal",
+			name: "Display My Modal",
+			callback: () => {
+				new ExampleModal(this.app, (result) => {
+					new Notice(`Hello, ${result}!`);
+				}).open();
+			},
 		});
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
