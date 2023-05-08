@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Editor, MarkdownView,Menu, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
 // Remember to rename these classes and interfaces!
 
@@ -27,7 +27,56 @@ export default class MyPlugin extends Plugin {
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('Status Bar Text');
+		statusBarItemEl.setText('Techfalls Status');
+
+		// Techfall's first event subscription
+		this.registerEvent(
+			this.app.workspace.on("file-menu", (menu, file) => {
+				menu.addItem((item) => {
+					item
+						.setTitle("Tech Print File Path 👈")
+						.setIcon("document")
+						.onClick(async () => {
+							new Notice(file.path);
+						});
+				});
+			})
+		);
+		// Techfall's second event subscription
+		this.registerEvent(this.app.workspace.on("editor-menu", (menu, editor, view) => {
+			menu.addItem((item) => {
+				item
+					.setTitle("Tech Print File Path 👈")
+					.setIcon("document")
+					.onClick(async () => {
+						new Notice(file.path);
+					});
+			})
+		}));
+
+		const ribbonIconE2 = this.addRibbonIcon("dice", "Open menu", (event) => {
+			const menu = new Menu(this.app);
+	  
+			menu.addItem((item) =>
+			  item
+				.setTitle("Copy")
+				.setIcon("documents")
+				.onClick(() => {
+				  new Notice("Copied");
+				})
+			);
+	  
+			menu.addItem((item) =>
+			  item
+				.setTitle("Paste")
+				.setIcon("paste")
+				.onClick(() => {
+				  new Notice("Pasted");
+				})
+			);
+	  
+			menu.showAtMouseEvent(event);
+		});
 
 		// This adds a simple command that can be triggered anywhere
 		this.addCommand({
@@ -36,6 +85,29 @@ export default class MyPlugin extends Plugin {
 			callback: () => {
 				new SampleModal(this.app).open();
 			}
+		});
+
+		// This is Techfall's first custom command from a custom plugin
+		this.addCommand({
+			id: 'log-message-to-console',
+			name: 'Log console message.',
+			callback: () => {
+				console.log("First console log from custom command. Great job!");
+			}
+		});
+		// This is Techfall's second custom command for a custom plugin
+		this.addCommand({
+			id: "insert-link",
+			name: "Insert link",
+			editorCallback: (editor: Editor) => {
+				const selectedText = editor.getSelection();
+
+				const onSubmit = (text: string, url: string) => {
+					editor.replaceSelection('[${text}](${url})');
+				};
+
+				new InsertLinkModal(this.app, selectedText, onSubmit).open();
+			};
 		});
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
@@ -121,8 +193,12 @@ class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+		containerEl.createEl("h1", { text: "Techfall's First Heading" });
 		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
 
+		const book = containerEl.createEl("div");
+		book.createEl("div", { text: "How To Take Smart Notes"});
+		book.createEl("small", { text: "Sonke Ahrens"});
 		new Setting(containerEl)
 			.setName('Setting #1')
 			.setDesc('It\'s a secret')
