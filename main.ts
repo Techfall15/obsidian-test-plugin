@@ -58,7 +58,7 @@ export default class MyPlugin extends Plugin {
 				const selectedText = editor.getSelection();
 
 				const onSubmit = (text: string, url: string) => {
-					editor.replaceSelection('[${text}](${url})');
+					editor.replaceSelection(`[${text}](${url})`);
 				};
 
 				new InsertLinkModal(this.app, selectedText, onSubmit).open();
