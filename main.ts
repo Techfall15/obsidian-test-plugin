@@ -14,12 +14,13 @@ export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
 
 	async onload() {
+		console.log('loading plugin');
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
+			new Notice('Hello from Techfall and VS Code!');
 		});
 		// Perform additional things with the ribbon
 		ribbonIconEl.addClass('my-plugin-ribbon-class');
@@ -79,7 +80,7 @@ export default class MyPlugin extends Plugin {
 	}
 
 	onunload() {
-
+		console.log('unloading plugin');
 	}
 
 	async loadSettings() {
