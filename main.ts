@@ -2,6 +2,7 @@ import { App, Editor, MarkdownView,Menu, Modal, Notice, Plugin, PluginSettingTab
 import { InsertLinkModal } from './modal';
 import { ExampleModal } from 'myfirstmodal';
 import { isStringObject } from 'util/types';
+import { randomInt } from 'crypto';
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -21,9 +22,13 @@ export default class MyPlugin extends Plugin {
 		await this.loadSettings();
 
 		// This creates an icon in the left ribbon.
-		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
+		const ribbonIconEl = this.addRibbonIcon('dice', 'Roll a number.', (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
-			new Notice('Good evening from Techfall and VS Code!');
+			const number = randomInt(1,7);
+			const rollString = `\nYou Rolled A: ${number}`;
+			const myFile = this.app.workspace.getActiveFile();
+			myFile?.vault.append(myFile,rollString);
+			new Notice(rollString);
 		});
 		// Perform additional things with the ribbon
 		ribbonIconEl.addClass('my-plugin-ribbon-class');
@@ -33,6 +38,9 @@ export default class MyPlugin extends Plugin {
 		statusBarItemEl.setText('Techfalls Status');
 
 		
+		
+
+
 		// ---------------------------------------------------------------------------- Get Parent Folder Name
 		this.addCommand({
 			id: "get-parent-folder-name",
