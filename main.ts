@@ -1,6 +1,7 @@
 import { App, Editor, MarkdownView,Menu, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { InsertLinkModal } from './modal';
 import { ExampleModal } from 'myfirstmodal';
+import { isStringObject } from 'util/types';
 // Remember to rename these classes and interfaces!
 
 interface MyPluginSettings {
@@ -13,6 +14,7 @@ const DEFAULT_SETTINGS: MyPluginSettings = {
 
 export default class MyPlugin extends Plugin {
 	settings: MyPluginSettings;
+
 
 	async onload() {
 		console.log('loading plugin');
@@ -31,9 +33,22 @@ export default class MyPlugin extends Plugin {
 		statusBarItemEl.setText('Techfalls Status');
 
 		
-
-
-		// This is Techfall's first custom command from a custom plugin
+		// ---------------------------------------------------------------------------- Get Parent Folder Name
+		this.addCommand({
+			id: "get-parent-folder-name",
+			name: "Get Parent Folder Name",
+			callback: () => {
+				const myFile = this.app.workspace.getActiveFile();
+				const parentName = myFile?.parent?.name;
+				const isParentRoot = myFile?.parent?.isRoot();
+				if(parentName != undefined)
+				{
+					new Notice(parentName.toString());
+				}
+				console.log(isParentRoot);
+			},
+		});
+		// ---------------------------------------------------------------------------- Log Console Message
 		this.addCommand({
 			id: 'log-message-to-console',
 			name: 'Log console message.',
@@ -41,6 +56,25 @@ export default class MyPlugin extends Plugin {
 				console.log("First console log from custom command. Great job!");
 			}
 		});
+		// ---------------------------------------------------------------------------- Create Note In Active Folder
+		this.addCommand({
+			id: "create-sub-note",
+			name: "Create Sub Note",
+			editorCallback: (editor: Editor) => {
+				const selectedText = editor.getSelection();
+				const currentFile = this.app.workspace.getActiveFile();
+				const folderName = currentFile?.parent?.name;
+				var newFilePath = "";
+				if(folderName != undefined)
+				{
+					newFilePath = `${folderName}` + '/';
+				}
+
+
+				editor.replaceSelection(`[[${folderName}/${selectedText}|${selectedText}]]`);
+			}
+		});
+		
 		// ---------------------------------------------------------------------------- Insert Link
 		this.addCommand({
 			id: "insert-link",
