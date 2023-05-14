@@ -71,13 +71,7 @@ export default class MyPlugin extends Plugin {
 			editorCallback: (editor: Editor) => {
 				const selectedText = editor.getSelection();
 				const currentFile = this.app.workspace.getActiveFile();
-				const folderName = currentFile?.parent?.name;
-				var newFilePath = "";
-				if(folderName != undefined)
-				{
-					newFilePath = `${folderName}` + '/';
-				}
-
+				const folderName = currentFile?.parent?.path;
 
 				editor.replaceSelection(`[[${folderName}/${selectedText}|${selectedText}]]`);
 			}
